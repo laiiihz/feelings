@@ -36,11 +36,18 @@ class _ScreenShotState extends State<ScreenShotPage> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           FloatingActionButton(
+            backgroundColor: colorB,
             onPressed: () {
-              setState(() {
-                colorA = genRandomColor();
-                colorB = genRandomColor();
-              });
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(pageBuilder: (BuildContext context,
+                    Animation animation, Animation secondaryAnimation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: ScreenShotPage(),
+                  );
+                }),
+              );
             },
             child: Icon(Icons.refresh),
             heroTag: 'floatOne',
@@ -50,6 +57,7 @@ class _ScreenShotState extends State<ScreenShotPage> {
           ),
           FloatingActionButton.extended(
             heroTag: 'floatTwo',
+            backgroundColor: colorA,
             onPressed: () {
               _screenshotController.capture().then((file) {
                 setState(() {

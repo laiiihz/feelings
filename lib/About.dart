@@ -243,6 +243,7 @@ class _AboutState extends State<AboutPage> {
                       '感谢下列开源项目',
                       style: TextStyle(color: Colors.blueGrey, fontSize: 20),
                     ),
+                    subtitle: Text('排名不分先后'),
                   ),
                   Card(
                     child: FlatButton(
@@ -291,6 +292,36 @@ class _AboutState extends State<AboutPage> {
                         title: Text('url_launcher'),
                         subtitle: Text('https://pub.dev/packages/url_launcher'),
                         trailing: Text('Flutter Team'),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: FlatButton(
+                      onPressed: () =>launch('https://pub.dev/packages/screenshot'),
+                      child: ListTile(
+                        title: Text('screenshot'),
+                        subtitle: Text('https://pub.dev/packages/screenshot'),
+                        trailing: Text('Sachin Ganesh'),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: FlatButton(
+                      onPressed: () =>launch('https://pub.dev/packages/image_gallery_saver'),
+                      child: ListTile(
+                        title: Text('image_gallery_saver'),
+                        subtitle: Text('https://pub.dev/packages/image_gallery_saver'),
+                        trailing: Text('quicey'),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: FlatButton(
+                      onPressed: () =>launch('https://pub.dev/packages/permission_handler'),
+                      child: ListTile(
+                        title: Text('permission_handler'),
+                        subtitle: Text('https://pub.dev/packages/permission_handler'),
+                        trailing: Text('Baseflow\nlong1eu\nSebastian Roth'),
                       ),
                     ),
                   ),
