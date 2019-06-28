@@ -16,6 +16,7 @@ class _ScreenShotState extends State<ScreenShotPage> {
   File _imageFile;
   Color colorA = genRandomColor();
   Color colorB = genRandomColor();
+  double _customValue=0.0;
   @override
   void initState() {
     // TODO: implement initState
@@ -53,7 +54,7 @@ class _ScreenShotState extends State<ScreenShotPage> {
             heroTag: 'floatOne',
           ),
           SizedBox(
-            width: 20,
+            width: MediaQuery.of(context).size.width - 200,
           ),
           FloatingActionButton.extended(
             heroTag: 'floatTwo',
