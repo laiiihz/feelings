@@ -4,7 +4,7 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:feelings/static.dart';
 import 'package:feelings/About.dart';
-
+import 'package:feelings/ScreenShotPage.dart';
 class HomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _HomeState();
@@ -130,7 +130,7 @@ class _HomeState extends State<HomePage> with SingleTickerProviderStateMixin {
                       color: Colors.transparent,
                       child: Text(
                         'Feelings',
-                        style: TextStyle(fontSize: 30,color: Colors.white),
+                        style: TextStyle(fontSize: 30, color: Colors.white),
                       ),
                     ),
                   ),
@@ -140,6 +140,10 @@ class _HomeState extends State<HomePage> with SingleTickerProviderStateMixin {
                     PopupMenuButton(
                       itemBuilder: (BuildContext context) {
                         return [
+                          PopupMenuItem<int>(
+                            child: Text('渐变壁纸'),
+                            value: 1,
+                          ),
                           PopupMenuItem<int>(
                             child: Text('关于'),
                             value: 0,
@@ -154,6 +158,12 @@ class _HomeState extends State<HomePage> with SingleTickerProviderStateMixin {
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         AboutPage()));
+                            break;
+                          case 1:
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (BuildContext context)=>ScreenShotPage()),
+                            );
                             break;
                         }
                       },
