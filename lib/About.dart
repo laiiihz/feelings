@@ -55,7 +55,7 @@ class _AboutState extends State<AboutPage> {
                         child: Container(
                           width: MediaQuery.of(context).size.width / 2 - 10,
                           child: FlatButton(
-                            onPressed: () => launch('https://www.coolapk.com/'),
+                            onPressed: () => launch('https://github.com/laiiihz/feelings'),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
