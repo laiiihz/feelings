@@ -168,6 +168,12 @@ class _HomeState extends State<HomePage> with SingleTickerProviderStateMixin {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Hero(
+                        tag: 'mid',
+                        child: SizedBox(
+                          width: 1,
+                        ),
+                      ),
+                      Hero(
                         tag: 'title',
                         child: Material(
                           color: Colors.transparent,
@@ -195,42 +201,52 @@ class _HomeState extends State<HomePage> with SingleTickerProviderStateMixin {
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                   actions: <Widget>[
-                    PopupMenuButton(
-                      itemBuilder: (BuildContext context) {
-                        return [
-                          PopupMenuItem<int>(
-                            child: Text('渐变壁纸'),
-                            value: 1,
+                    Hero(
+                      tag: 'action',
+                      child: Material(
+                        color: Colors.transparent,
+                        child: PopupMenuButton(
+                          icon: Icon(
+                            Icons.menu,
+                            color: Colors.white,
                           ),
-                          PopupMenuItem<int>(
-                            child: Text('关于'),
-                            value: 0,
-                          ),
-                        ];
-                      },
-                      onSelected: (value) {
-                        switch (value) {
-                          case 0:
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        AboutPage()));
-                            break;
-                          case 1:
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      ScreenShotPage(
-                                        alignmentBegin: Alignment.topLeft,
-                                        alignmentEnd: Alignment.bottomRight,
-                                        rainbow: false,
-                                      )),
-                            );
-                            break;
-                        }
-                      },
+                          itemBuilder: (BuildContext context) {
+                            return [
+                              PopupMenuItem<int>(
+                                child: Text('渐变壁纸'),
+                                value: 1,
+                              ),
+                              PopupMenuItem<int>(
+                                child: Text('关于'),
+                                value: 0,
+                              ),
+                            ];
+                          },
+                          onSelected: (value) {
+                            switch (value) {
+                              case 0:
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            AboutPage()));
+                                break;
+                              case 1:
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          ScreenShotPage(
+                                            alignmentBegin: Alignment.topLeft,
+                                            alignmentEnd: Alignment.bottomRight,
+                                            rainbow: false,
+                                          )),
+                                );
+                                break;
+                            }
+                          },
+                        ),
+                      ),
                     ),
                   ],
                 ),

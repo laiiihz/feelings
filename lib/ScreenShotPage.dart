@@ -207,6 +207,16 @@ class _ScreenShotState extends State<ScreenShotPage> {
               child: AppBar(
                 backgroundColor: Colors.transparent,
                 elevation: 0,
+                leading: Hero(
+                  tag: 'action',
+                  child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back,color: Colors.white,),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ),
+                ),
                 title: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[

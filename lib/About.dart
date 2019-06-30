@@ -35,6 +35,16 @@ class _AboutState extends State<AboutPage> {
               slivers: <Widget>[
                 SliverAppBar(
                   backgroundColor: _colorB,
+                  leading: Hero(
+                    tag: 'action',
+                    child: Material(
+                      color: Colors.transparent,
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back,color: Colors.white,),
+                        onPressed: ()=>Navigator.of(context).pop(),
+                      ),
+                    ),
+                  ),
                   title: Hero(
                       tag: 'title',
                       child: Material(
@@ -49,26 +59,36 @@ class _AboutState extends State<AboutPage> {
                   pinned: false,
                   snap: false,
                   flexibleSpace: FlexibleSpaceBar(
-                    background: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [_colorA, _colorB],
-                        ),
-                      ),
-                      child: Center(
-                        child: Hero(
-                          tag: 'title2',
-                          child: Material(
-                            color: Colors.transparent,
-                            child: Text(
-                              '关于',
-                              style: TextStyle(fontSize: 30, color: Colors.white),
+                    background: Stack(
+                      children: <Widget>[
+                        Hero(
+                          tag: 'mid',
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [_colorA, _colorB],
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                        Container(
+                          child: Center(
+                            child:Hero(
+                              tag: 'title2',
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Text(
+                                  '关于',
+                                  style:
+                                  TextStyle(fontSize: 30, color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   expandedHeight: 200,
