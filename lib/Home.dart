@@ -162,7 +162,7 @@ class _HomeState extends State<HomePage> with SingleTickerProviderStateMixin {
                           case 1:
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (BuildContext context)=>ScreenShotPage()),
+                              MaterialPageRoute(builder: (BuildContext context)=>ScreenShotPage(alignmentBegin:Alignment.topLeft,alignmentEnd: Alignment.bottomRight,)),
                             );
                             break;
                         }
