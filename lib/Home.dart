@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:feelings/static.dart';
 import 'package:feelings/About.dart';
 import 'package:feelings/ScreenShotPage.dart';
+
 class HomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _HomeState();
@@ -117,6 +118,45 @@ class _HomeState extends State<HomePage> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            playLocal() async {
+              print('启动');
+              _audioAdvancedAudioPlayer =
+                  await audioPlayer.play('Thunderstorm.mp3', volume: 1);
+              _audioAdvancedAudioPlayer.onDurationChanged.listen((onData) {
+                setState(() {
+                  _durationMusicMillseondc = onData.inMilliseconds;
+                });
+              });
+              _audioAdvancedAudioPlayer.onAudioPositionChanged.listen((onData) {
+                setState(() {
+                  _valueMusic =
+                      onData.inMilliseconds / _durationMusicMillseondc;
+                  _durationNow = onData.inMilliseconds;
+                });
+              });
+            }
+
+            stopLocal() {
+              print('停止');
+              _audioAdvancedAudioPlayer.pause();
+            }
+
+            if (_stopped) {
+              playLocal();
+            } else {
+              stopLocal();
+            }
+            setState(() {
+              _stopped = !_stopped;
+            });
+          },
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+          backgroundColor: _colorA,
+          child: _stopped ? Icon(Icons.play_arrow) : Icon(Icons.stop),
+        ),
         body: Container(
           child: ListView(
             children: <Widget>[
@@ -124,15 +164,33 @@ class _HomeState extends State<HomePage> with SingleTickerProviderStateMixin {
                 height: 100,
                 alignment: Alignment.centerRight,
                 child: AppBar(
-                  title: Hero(
-                    tag: 'title',
-                    child: Material(
-                      color: Colors.transparent,
-                      child: Text(
-                        'Feelings',
-                        style: TextStyle(fontSize: 30, color: Colors.white),
+                  title: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Hero(
+                        tag: 'title',
+                        child: Material(
+                          color: Colors.transparent,
+                          child: Text(
+                            'Feelings',
+                            style: TextStyle(fontSize: 30, color: Colors.white),
+                          ),
+                        ),
                       ),
-                    ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Hero(
+                        tag: 'title2',
+                        child: Material(
+                          color: Colors.transparent,
+                          child: Text(
+                            '主页',
+                            style: TextStyle(fontSize: 30, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   backgroundColor: Colors.transparent,
                   elevation: 0,
@@ -162,7 +220,13 @@ class _HomeState extends State<HomePage> with SingleTickerProviderStateMixin {
                           case 1:
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (BuildContext context)=>ScreenShotPage(alignmentBegin:Alignment.topLeft,alignmentEnd: Alignment.bottomRight,)),
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ScreenShotPage(
+                                        alignmentBegin: Alignment.topLeft,
+                                        alignmentEnd: Alignment.bottomRight,
+                                        rainbow: false,
+                                      )),
                             );
                             break;
                         }
@@ -173,57 +237,6 @@ class _HomeState extends State<HomePage> with SingleTickerProviderStateMixin {
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height - 300,
-              ),
-              Center(
-                child: Hero(
-                  tag: 'start',
-                  child: MaterialButton(
-                    height: 100,
-                    minWidth: 100,
-                    onPressed: () {
-                      playLocal() async {
-                        print('启动');
-                        _audioAdvancedAudioPlayer = await audioPlayer
-                            .play('Thunderstorm.mp3', volume: 1);
-                        _audioAdvancedAudioPlayer.onDurationChanged
-                            .listen((onData) {
-                          setState(() {
-                            _durationMusicMillseondc = onData.inMilliseconds;
-                          });
-                        });
-                        _audioAdvancedAudioPlayer.onAudioPositionChanged
-                            .listen((onData) {
-                          setState(() {
-                            _valueMusic = onData.inMilliseconds /
-                                _durationMusicMillseondc;
-                            _durationNow = onData.inMilliseconds;
-                          });
-                        });
-                      }
-
-                      stopLocal() {
-                        print('停止');
-                        _audioAdvancedAudioPlayer.pause();
-                      }
-
-                      if (_stopped) {
-                        playLocal();
-                      } else {
-                        stopLocal();
-                      }
-                      setState(() {
-                        _stopped = !_stopped;
-                      });
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50)),
-                    color: Colors.white,
-                    child: Text(
-                      _stopped ? '启动' : '结束',
-                      style: TextStyle(fontSize: 25),
-                    ),
-                  ),
-                ),
               ),
               SizedBox(
                 height: 25,
@@ -259,27 +272,40 @@ class _HomeState extends State<HomePage> with SingleTickerProviderStateMixin {
                         EdgeInsets.only(left: 40, top: 0, right: 0, bottom: 0),
                     alignment: Alignment.centerLeft,
                     child: Text(
-                        DateTime.fromMillisecondsSinceEpoch(_durationNow)
-                                .minute
-                                .toString() +
-                            ":" +
-                            DateTime.fromMillisecondsSinceEpoch(_durationNow)
-                                .second
-                                .toString()),
+                      DateTime.fromMillisecondsSinceEpoch(_durationNow)
+                              .minute
+                              .toString() +
+                          ":" +
+                          DateTime.fromMillisecondsSinceEpoch(_durationNow)
+                              .second
+                              .toString(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
                   ),
                   Container(
                     padding:
                         EdgeInsets.only(left: 0, top: 0, right: 40, bottom: 0),
                     alignment: Alignment.centerRight,
-                    child: Text(DateTime.fromMillisecondsSinceEpoch(
-                                _durationMusicMillseondc)
-                            .minute
-                            .toString() +
-                        ":" +
-                        DateTime.fromMillisecondsSinceEpoch(
-                                _durationMusicMillseondc)
-                            .second
-                            .toString()),
+                    child: Text(
+                      DateTime.fromMillisecondsSinceEpoch(
+                                  _durationMusicMillseondc)
+                              .minute
+                              .toString() +
+                          ":" +
+                          DateTime.fromMillisecondsSinceEpoch(
+                                  _durationMusicMillseondc)
+                              .second
+                              .toString(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
                   ),
                 ],
               ),

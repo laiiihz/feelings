@@ -8,9 +8,9 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutState extends State<AboutPage> {
-  final _colorA=genRandomColor();
-  final _colorB=genRandomColor();
-  final _colorC=genRandomColor();
+  final _colorA = genRandomColor();
+  final _colorB = genRandomColor();
+  final _colorC = genRandomColor();
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Stack(
@@ -54,16 +54,19 @@ class _AboutState extends State<AboutPage> {
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [
-                            _colorA,
-                            _colorB
-                          ],
+                          colors: [_colorA, _colorB],
                         ),
                       ),
                       child: Center(
-                        child: Text(
-                          '关于',
-                          style: TextStyle(fontSize: 30, color: Colors.white),
+                        child: Hero(
+                          tag: 'title2',
+                          child: Material(
+                            color: Colors.transparent,
+                            child: Text(
+                              '关于',
+                              style: TextStyle(fontSize: 30, color: Colors.white),
+                            ),
+                          ),
                         ),
                       ),
                     ),

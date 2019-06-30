@@ -7,10 +7,15 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:feelings/static.dart';
 
 class ScreenShotPage extends StatefulWidget {
-  ScreenShotPage({Key key, this.alignmentBegin, this.alignmentEnd})
-      : super(key: key);
+  ScreenShotPage({
+    Key key,
+    this.alignmentBegin,
+    this.alignmentEnd,
+    this.rainbow,
+  }) : super(key: key);
   final Alignment alignmentBegin;
   final Alignment alignmentEnd;
+  final bool rainbow;
   @override
   State<StatefulWidget> createState() => _ScreenShotState();
 }
@@ -20,8 +25,10 @@ class _ScreenShotState extends State<ScreenShotPage> {
   File _imageFile;
   Color colorA = genRandomColor();
   Color colorB = genRandomColor();
-  double _customValue = 0.0;
-  _go2NextPage(Alignment alignmentA, Alignment alignmentB) {
+  _go2NextPage(
+    Alignment alignmentA,
+    Alignment alignmentB,
+  ) {
     Navigator.of(context).pop();
     Navigator.pushReplacement(
       context,
@@ -32,6 +39,7 @@ class _ScreenShotState extends State<ScreenShotPage> {
           child: ScreenShotPage(
             alignmentBegin: alignmentA,
             alignmentEnd: alignmentB,
+            rainbow: false,
           ),
         );
       }),
@@ -39,10 +47,16 @@ class _ScreenShotState extends State<ScreenShotPage> {
   }
 
   Widget _genListTile(
-      Alignment alignmentOne, Alignment alignmentTwo, String text) {
+    Alignment alignmentOne,
+    Alignment alignmentTwo,
+    String text,
+  ) {
     return FlatButton(
       onPressed: () {
-        _go2NextPage(alignmentOne, alignmentTwo);
+        _go2NextPage(
+          alignmentOne,
+          alignmentTwo,
+        );
       },
       child: ListTile(
         title: Text(text),
@@ -82,54 +96,81 @@ class _ScreenShotState extends State<ScreenShotPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          FloatingActionButton(
-            backgroundColor: colorB,
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                PageRouteBuilder(pageBuilder: (BuildContext context,
-                    Animation animation, Animation secondaryAnimation) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: ScreenShotPage(
-                      alignmentBegin: Alignment.topLeft,
-                      alignmentEnd: Alignment.bottomRight,
-                    ),
-                  );
-                }),
-              );
-            },
-            child: Icon(Icons.refresh),
-            heroTag: 'floatOne',
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width - 200,
-          ),
-          FloatingActionButton.extended(
-            heroTag: 'floatTwo',
-            backgroundColor: colorA,
-            onPressed: () {
-              _screenshotController.capture().then((file) {
-                setState(() {
-                  _imageFile = file;
-                });
-                _saveImage() async {
-                  Uint8List bytes = _imageFile.readAsBytesSync() as Uint8List;
-                  final image = await ImageGallerySaver.save(bytes);
-                }
+      floatingActionButton: Container(
+        height: 100,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            FloatingActionButton(
+              backgroundColor: colorB,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(pageBuilder: (BuildContext context,
+                      Animation animation, Animation secondaryAnimation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: ScreenShotPage(
+                        alignmentBegin: Alignment.topLeft,
+                        alignmentEnd: Alignment.bottomRight,
+                        rainbow: false,
+                      ),
+                    );
+                  }),
+                );
+              },
+              child: Icon(Icons.shuffle),
+              heroTag: 'floatOne',
+            ),
+            SizedBox(
+              width: 20,
+            ),
+            FloatingActionButton(
+              backgroundColor: colorB,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(pageBuilder: (BuildContext context,
+                      Animation animation, Animation secondaryAnimation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: ScreenShotPage(
+                        alignmentBegin: Alignment.topLeft,
+                        alignmentEnd: Alignment.bottomRight,
+                        rainbow: true,
+                      ),
+                    );
+                  }),
+                );
+              },
+              child: Icon(Icons.grain),
+              heroTag: 'floatThree',
+            ),
+            SizedBox(
+              width: 20,
+            ),
+            FloatingActionButton(
+              heroTag: 'floatTwo',
+              backgroundColor: colorA,
+              onPressed: () {
+                _screenshotController.capture().then((file) {
+                  setState(() {
+                    _imageFile = file;
+                  });
+                  _saveImage() async {
+                    Uint8List bytes = _imageFile.readAsBytesSync() as Uint8List;
+                    final image = await ImageGallerySaver.save(bytes);
+                  }
 
-                _saveImage();
-              }).catchError((onError) {
-                print(onError);
-              });
-            },
-            label: Text('保存'),
-            icon: Icon(Icons.save_alt),
-          ),
-        ],
+                  _saveImage();
+                }).catchError((onError) {
+                  print(onError);
+                });
+              },
+              child: Icon(Icons.save_alt),
+            ),
+          ],
+        ),
       ),
       body: Center(
         child: Stack(
@@ -142,10 +183,21 @@ class _ScreenShotState extends State<ScreenShotPage> {
                   gradient: LinearGradient(
                     begin: widget.alignmentBegin,
                     end: widget.alignmentEnd,
-                    colors: [
-                      colorA,
-                      colorB,
-                    ],
+                    colors: widget.rainbow
+                        ? [
+                            genRandomColor(),
+                            genRandomColor(),
+                            genRandomColor(),
+                            genRandomColor(),
+                            genRandomColor(),
+                            genRandomColor(),
+                            genRandomColor(),
+                            genRandomColor(),
+                          ]
+                        : [
+                            colorA,
+                            colorB,
+                          ],
                   ),
                 ),
               ),
@@ -155,15 +207,30 @@ class _ScreenShotState extends State<ScreenShotPage> {
               child: AppBar(
                 backgroundColor: Colors.transparent,
                 elevation: 0,
-                title: Hero(
-                  tag: 'title',
-                  child: Material(
-                    color: Colors.transparent,
-                    child: Text(
-                      'Feelings',
-                      style: TextStyle(fontSize: 30, color: Colors.white),
+                title: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Hero(
+                      tag: 'title',
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Text(
+                          'Feelings',
+                          style: TextStyle(fontSize: 30, color: Colors.white),
+                        ),
+                      ),
                     ),
-                  ),
+                    Hero(
+                      tag: 'title2',
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Text(
+                          '壁纸',
+                          style: TextStyle(fontSize: 30, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 actions: <Widget>[
                   IconButton(
