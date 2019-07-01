@@ -35,6 +35,7 @@ class _HomeState extends State<HomePage> with SingleTickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     audioPlayer = AudioCache();
     _animationController = AnimationController(
       duration: Duration(seconds: 2),
@@ -113,6 +114,18 @@ class _HomeState extends State<HomePage> with SingleTickerProviderStateMixin {
           });
         _animationController.forward();
       }
+
+    });
+    Future.delayed(Duration(microseconds: 1),(){
+      Navigator.of(context).push(
+        PageRouteBuilder(pageBuilder: (BuildContext context, Animation animation, Animation secondaryAnimation) {
+          return FadeTransition(opacity: animation,child: ScreenShotPage(
+            alignmentBegin: Alignment.topLeft,
+            alignmentEnd: Alignment.bottomRight,
+            rainbow: false,
+          ),);
+        }),
+      );
     });
   }
 
@@ -202,7 +215,7 @@ class _HomeState extends State<HomePage> with SingleTickerProviderStateMixin {
                   elevation: 0,
                   actions: <Widget>[
                     Hero(
-                      tag: 'action',
+                      tag: 'action1',
                       child: Material(
                         color: Colors.transparent,
                         child: PopupMenuButton(
