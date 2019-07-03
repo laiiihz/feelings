@@ -1,5 +1,5 @@
 import 'package:feelings/About.dart';
-import 'package:feelings/TestPage.dart';
+import 'package:feelings/SplashPage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:typed_data';
@@ -111,7 +111,7 @@ class _ScreenShotState extends State<ScreenShotPage> {
     }
     _ifInitApp().then((onValue){
       if((onValue??true)){
-        Future.delayed(Duration(seconds: 1),(){Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>TestPage()));});
+        Future.delayed(Duration(seconds: 1),(){Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>SplashPage()));});
       }
     });
 
@@ -327,10 +327,6 @@ class _ScreenShotState extends State<ScreenShotPage> {
                                   child: Text('关于'),
                                   value: 0,
                                 ),
-                                PopupMenuItem<int>(
-                                  child: Text('Dev'),
-                                  value: 2,
-                                ),
                               ];
                             },
                             onSelected: (value) {
@@ -377,8 +373,6 @@ class _ScreenShotState extends State<ScreenShotPage> {
                                   });
 
                                   break;
-                                case 2:
-                                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>TestPage(),));
                               }
                             },
                           ),

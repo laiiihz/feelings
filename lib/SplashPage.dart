@@ -4,12 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class TestPage extends StatefulWidget {
+class SplashPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _TestState();
+  State<StatefulWidget> createState() => _SplashPage();
 }
 
-class _TestState extends State<TestPage> {
+class _SplashPage extends State<SplashPage> {
   PageController _pageController = PageController(initialPage: 0);
   @override
   void initState() {
