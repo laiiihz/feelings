@@ -70,3 +70,4 @@
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 assets/Thunderstorm.mp3
 android/app/release/
+assets/Thunderstorm.ogg

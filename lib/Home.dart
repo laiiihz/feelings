@@ -136,7 +136,7 @@ class _HomeState extends State<HomePage> with SingleTickerProviderStateMixin {
             playLocal() async {
               print('启动');
               _audioAdvancedAudioPlayer =
-                  await audioPlayer.play('Thunderstorm.mp3', volume: 1);
+                  await audioPlayer.play('Thunderstorm.ogg', volume: 1);
               _audioAdvancedAudioPlayer.onDurationChanged.listen((onData) {
                 setState(() {
                   _durationMusicMillseondc = onData.inMilliseconds;

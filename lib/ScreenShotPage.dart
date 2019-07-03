@@ -1,12 +1,14 @@
 import 'package:feelings/About.dart';
+import 'package:feelings/TestPage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:screenshot/screenshot.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:feelings/static.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class ScreenShotPage extends StatefulWidget {
   ScreenShotPage({
@@ -103,13 +105,16 @@ class _ScreenShotState extends State<ScreenShotPage> {
     // TODO: implement initState
 
     super.initState();
-    _check() async {
-      Map<PermissionGroup, PermissionStatus> permissions =
-          await PermissionHandler()
-              .requestPermissions([PermissionGroup.storage]);
+    Future<bool> _ifInitApp()async{
+     SharedPreferences _shared=await SharedPreferences.getInstance();
+     return _shared.getBool('isInitApp'??true);
     }
+    _ifInitApp().then((onValue){
+      if((onValue??true)){
+        Future.delayed(Duration(seconds: 1),(){Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>TestPage()));});
+      }
+    });
 
-    _check();
   }
 
   @override
@@ -322,6 +327,10 @@ class _ScreenShotState extends State<ScreenShotPage> {
                                   child: Text('关于'),
                                   value: 0,
                                 ),
+                                PopupMenuItem<int>(
+                                  child: Text('Dev'),
+                                  value: 2,
+                                ),
                               ];
                             },
                             onSelected: (value) {
@@ -368,6 +377,8 @@ class _ScreenShotState extends State<ScreenShotPage> {
                                   });
 
                                   break;
+                                case 2:
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>TestPage(),));
                               }
                             },
                           ),
