@@ -3,7 +3,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:feelings/static.dart';
-import 'package:feelings/About.dart';
+import 'package:feelings/About/About.dart';
 import 'package:feelings/ScreenShotPage.dart';
 
 class HomePage extends StatefulWidget {

@@ -1,3 +1,4 @@
+import 'package:feelings/About/StaticAbout.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:feelings/static.dart';
@@ -11,6 +12,35 @@ class _AboutState extends State<AboutPage> {
   final _colorA = genRandomColor();
   final _colorB = genRandomColor();
   final _colorC = genRandomColor();
+
+  List<List<String>> _projectList = [
+    ['Flutter', 'https://github.com/flutter/flutter', 'Google'],
+    ['AOSP', 'https://source.android.com/', 'Google'],
+    ['Dart', 'https://dart.dev/', 'Google'],
+    ['audioplayers', 'https://pub.dev/packages/audioplayers', 'Luan Nico'],
+    ['url_launcher', 'https://pub.dev/packages/url_launcher', 'Flutter Team'],
+    ['screenshot', 'https://pub.dev/packages/screenshot', 'Sachin Ganesh'],
+    ['image_gallery_saver', 'https://pub.dev/packages/image_gallery_saver', 'quicey'],
+    ['permission_handler', 'https://pub.dev/packages/permission_handler', 'Baseflow\nlong1eu\nSebastian Roth'],
+    ['scoped_model', 'https://pub.dev/packages/scoped_model', 'Andrew Wilson\nBrian Ega'],
+    ['shared_preferences', 'https://pub.dev/packages/shared_preferences', 'Flutter Team'],
+    ['flare_flutter', 'https://pub.dev/packages/flare_flutter', '2Dimensions Team'],
+
+
+  ];
+  List<Widget> _projectsCards = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    for (List<String> item in _projectList) {
+      OpenSourceProjects _openSourceProjects =
+          OpenSourceProjects(item[0], item[1], item[2]);
+      _projectsCards.add(_openSourceProjects.genListTile());
+    }
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Stack(
@@ -40,8 +70,11 @@ class _AboutState extends State<AboutPage> {
                     child: Material(
                       color: Colors.transparent,
                       child: IconButton(
-                        icon: Icon(Icons.arrow_back,color: Colors.white,),
-                        onPressed: ()=>Navigator.of(context).pop(),
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => Navigator.of(context).pop(),
                       ),
                     ),
                   ),
@@ -75,14 +108,14 @@ class _AboutState extends State<AboutPage> {
                         ),
                         Container(
                           child: Center(
-                            child:Hero(
+                            child: Hero(
                               tag: 'title2',
                               child: Material(
                                 color: Colors.transparent,
                                 child: Text(
                                   '关于',
-                                  style:
-                                  TextStyle(fontSize: 30, color: Colors.white),
+                                  style: TextStyle(
+                                      fontSize: 30, color: Colors.white),
                                 ),
                               ),
                             ),
@@ -323,98 +356,9 @@ class _AboutState extends State<AboutPage> {
                         ),
                         subtitle: Text('排名不分先后'),
                       ),
-                      Card(
-                        child: FlatButton(
-                          onPressed: () =>
-                              launch('https://github.com/flutter/flutter'),
-                          child: ListTile(
-                            title: Text('Flutter'),
-                            subtitle:
-                                Text('https://github.com/flutter/flutter'),
-                            trailing: Text('Google'),
-                          ),
-                        ),
-                      ),
-                      Card(
-                        child: FlatButton(
-                          onPressed: () =>
-                              launch('https://source.android.com/'),
-                          child: ListTile(
-                            title: Text('AOSP'),
-                            subtitle: Text('https://source.android.com/'),
-                            trailing: Text('Google'),
-                          ),
-                        ),
-                      ),
-                      Card(
-                        child: FlatButton(
-                          onPressed: () => launch('https://dart.dev/'),
-                          child: ListTile(
-                            title: Text('Dart'),
-                            subtitle: Text('https://dart.dev/'),
-                            trailing: Text('Google'),
-                          ),
-                        ),
-                      ),
-                      Card(
-                        child: FlatButton(
-                          onPressed: () =>
-                              launch('https://pub.dev/packages/audioplayers'),
-                          child: ListTile(
-                            title: Text('audioplayers'),
-                            subtitle:
-                                Text('https://pub.dev/packages/audioplayers'),
-                            trailing: Text('Luan Nico'),
-                          ),
-                        ),
-                      ),
-                      Card(
-                        child: FlatButton(
-                          onPressed: () =>
-                              launch('https://pub.dev/packages/url_launcher'),
-                          child: ListTile(
-                            title: Text('url_launcher'),
-                            subtitle:
-                                Text('https://pub.dev/packages/url_launcher'),
-                            trailing: Text('Flutter Team'),
-                          ),
-                        ),
-                      ),
-                      Card(
-                        child: FlatButton(
-                          onPressed: () =>
-                              launch('https://pub.dev/packages/screenshot'),
-                          child: ListTile(
-                            title: Text('screenshot'),
-                            subtitle:
-                                Text('https://pub.dev/packages/screenshot'),
-                            trailing: Text('Sachin Ganesh'),
-                          ),
-                        ),
-                      ),
-                      Card(
-                        child: FlatButton(
-                          onPressed: () => launch(
-                              'https://pub.dev/packages/image_gallery_saver'),
-                          child: ListTile(
-                            title: Text('image_gallery_saver'),
-                            subtitle: Text(
-                                'https://pub.dev/packages/image_gallery_saver'),
-                            trailing: Text('quicey'),
-                          ),
-                        ),
-                      ),
-                      Card(
-                        child: FlatButton(
-                          onPressed: () => launch(
-                              'https://pub.dev/packages/permission_handler'),
-                          child: ListTile(
-                            title: Text('permission_handler'),
-                            subtitle: Text(
-                                'https://pub.dev/packages/permission_handler'),
-                            trailing: Text('Baseflow\nlong1eu\nSebastian Roth'),
-                          ),
-                        ),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: _projectsCards,
                       ),
                       ListTile(
                         leading: Icon(Icons.group_work),

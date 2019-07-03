@@ -1,4 +1,4 @@
-import 'package:feelings/About.dart';
+import 'package:feelings/About/About.dart';
 import 'package:feelings/SplashPage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
