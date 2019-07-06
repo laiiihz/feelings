@@ -211,8 +211,29 @@ class _ScreenShotState extends State<ScreenShotPage> {
                           }
 
                           _saveImage();
-                          Scaffold.of(context)
-                              .showSnackBar(SnackBar(content: Text('已保存')));
+                          Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Container(
+                                    height: 50,
+                                    width: 50,
+                                    child: FlareActor(
+                                      'Animation/smile.flr',
+                                      alignment: Alignment.center,
+                                      fit: BoxFit.contain,
+                                      animation: 'Appear',
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 30,
+                                  ),
+                                  Text('已保存',style: TextStyle(fontSize: 20),),
+                                ],
+                              ),
+                            ),
+                          );
                           setState(() {
                             _tempWidget = FlareActor(
                               'Animation/downloadAni.flr',
