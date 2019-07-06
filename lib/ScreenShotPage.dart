@@ -8,7 +8,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:feelings/static.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flare_flutter/flare_actor.dart';
 
 class ScreenShotPage extends StatefulWidget {
   ScreenShotPage({
@@ -40,6 +40,7 @@ class _ScreenShotState extends State<ScreenShotPage> {
     genRandomColor(),
   ];
   Color _backButtonColor = Colors.transparent;
+  Widget _tempWidget = Icon(Icons.save_alt);
 
   /// *
   /// EAST EGG!
@@ -105,16 +106,19 @@ class _ScreenShotState extends State<ScreenShotPage> {
     // TODO: implement initState
 
     super.initState();
-    Future<bool> _ifInitApp()async{
-     SharedPreferences _shared=await SharedPreferences.getInstance();
-     return _shared.getBool('isInitApp'??true);
+    Future<bool> _ifInitApp() async {
+      SharedPreferences _shared = await SharedPreferences.getInstance();
+      return _shared.getBool('isInitApp' ?? true);
     }
-    _ifInitApp().then((onValue){
-      if((onValue??true)){
-        Future.delayed(Duration(seconds: 1),(){Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>SplashPage()));});
+
+    _ifInitApp().then((onValue) {
+      if ((onValue ?? true)) {
+        Future.delayed(Duration(seconds: 1), () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => SplashPage()));
+        });
       }
     });
-
   }
 
   @override
@@ -144,7 +148,15 @@ class _ScreenShotState extends State<ScreenShotPage> {
                       }),
                     );
                   },
-                  child: Icon(Icons.shuffle),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: FlareActor(
+                      'Animation/random.flr',
+                      animation: 'random',
+                      alignment: Alignment.center,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                   heroTag: 'floatOne',
                 ),
                 SizedBox(
@@ -168,36 +180,55 @@ class _ScreenShotState extends State<ScreenShotPage> {
                       }),
                     );
                   },
-                  child: Icon(Icons.grain),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: FlareActor(
+                      'Animation/rainbow.flr',
+                      animation: 'rainbow',
+                      alignment: Alignment.center,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                   heroTag: 'floatThree',
                 ),
                 SizedBox(
                   width: 20,
                 ),
-                Builder(builder: (BuildContext context) {
-                  return FloatingActionButton(
-                    heroTag: 'floatTwo',
-                    backgroundColor: colorA,
-                    onPressed: () {
-                      _screenshotController.capture().then((file) {
-                        setState(() {
-                          _imageFile = file;
-                        });
-                        _saveImage() async {
-                          Uint8List bytes =
-                          _imageFile.readAsBytesSync() as Uint8List;
-                          final image = await ImageGallerySaver.save(bytes);
-                        }
+                Builder(
+                  builder: (BuildContext context) {
+                    return FloatingActionButton(
+                      heroTag: 'floatTwo',
+                      backgroundColor: colorA,
+                      onPressed: () {
+                        _screenshotController.capture().then((file) {
+                          setState(() {
+                            _imageFile = file;
+                          });
+                          _saveImage() async {
+                            Uint8List bytes =
+                                _imageFile.readAsBytesSync() as Uint8List;
+                            final image = await ImageGallerySaver.save(bytes);
+                          }
 
-                        _saveImage();
-                        Scaffold.of(context).showSnackBar(SnackBar(content: Text('已保存')));
-                      }).catchError((onError) {
-                        print(onError);
-                      });
-                    },
-                    child: Icon(Icons.save_alt),
-                  );
-                },),
+                          _saveImage();
+                          Scaffold.of(context)
+                              .showSnackBar(SnackBar(content: Text('已保存')));
+                          setState(() {
+                            _tempWidget = FlareActor(
+                              'Animation/downloadAni.flr',
+                              alignment: Alignment.center,
+                              fit: BoxFit.contain,
+                              animation: 'down_photo',
+                            );
+                          });
+                        }).catchError((onError) {
+                          print(onError);
+                        });
+                      },
+                      child: _tempWidget,
+                    );
+                  },
+                ),
               ],
             ),
           ),

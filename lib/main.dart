@@ -3,7 +3,7 @@ import 'package:feelings/Home.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/scheduler.dart';
 void main() {
-  timeDilation=2.0;
+  timeDilation=1.5;
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,

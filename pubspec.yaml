@@ -59,6 +59,9 @@ flutter:
     - Animation/wallpaper.flr
     - Animation/success.flr
     - Animation/load.flr
+    - Animation/downloadAni.flr
+    - Animation/rainbow.flr
+    - Animation/random.flr
 
   # To add assets to your application, add an assets section, like this:
   # assets:
