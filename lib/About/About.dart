@@ -1,4 +1,5 @@
 import 'package:feelings/About/StaticAbout.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:feelings/static.dart';
@@ -20,13 +21,31 @@ class _AboutState extends State<AboutPage> {
     ['audioplayers', 'https://pub.dev/packages/audioplayers', 'Luan Nico'],
     ['url_launcher', 'https://pub.dev/packages/url_launcher', 'Flutter Team'],
     ['screenshot', 'https://pub.dev/packages/screenshot', 'Sachin Ganesh'],
-    ['image_gallery_saver', 'https://pub.dev/packages/image_gallery_saver', 'quicey'],
-    ['permission_handler', 'https://pub.dev/packages/permission_handler', 'Baseflow\nlong1eu\nSebastian Roth'],
-    ['scoped_model', 'https://pub.dev/packages/scoped_model', 'Andrew Wilson\nBrian Ega'],
-    ['shared_preferences', 'https://pub.dev/packages/shared_preferences', 'Flutter Team'],
-    ['flare_flutter', 'https://pub.dev/packages/flare_flutter', '2Dimensions Team'],
-
-
+    [
+      'image_gallery_saver',
+      'https://pub.dev/packages/image_gallery_saver',
+      'quicey'
+    ],
+    [
+      'permission_handler',
+      'https://pub.dev/packages/permission_handler',
+      'Baseflow\nlong1eu\nSebastian Roth'
+    ],
+    [
+      'scoped_model',
+      'https://pub.dev/packages/scoped_model',
+      'Andrew Wilson\nBrian Ega'
+    ],
+    [
+      'shared_preferences',
+      'https://pub.dev/packages/shared_preferences',
+      'Flutter Team'
+    ],
+    [
+      'flare_flutter',
+      'https://pub.dev/packages/flare_flutter',
+      '2Dimensions Team'
+    ],
   ];
   List<Widget> _projectsCards = [];
 
@@ -377,6 +396,100 @@ class _AboutState extends State<AboutPage> {
                             title: Text('ThunderStorm'),
                             subtitle: Text(
                                 'https://www.youtube.com/audiolibrary/soundeffects?ar=3'),
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.person_pin),
+                        title: Text(
+                          '感谢下列动画作者',
+                          style:
+                              TextStyle(color: Colors.blueGrey, fontSize: 20),
+                        ),
+                      ),
+                      Card(
+                        child: FlatButton(
+                          onPressed: () => launch(
+                              'https://www.2dimensions.com/a/pollux/files/flare/devquest-joy-icon/preview'),
+                          child: ListTile(
+                            leading: Container(
+                              height: 50,
+                              width: 50,
+                              child: FlareActor(
+                                'Animation/smile.flr',
+                                alignment: Alignment.center,
+                                fit: BoxFit.contain,
+                                animation: 'Appear',
+                              ),
+                            ),
+                            trailing: Text('Guido Rosso'),
+                            title: Text('DevQuest Joy Icon\nCC BY 4.0'),
+                            subtitle: Text(
+                                'https://www.2dimensions.com/a/pollux/files/flare/devquest-joy-icon/preview'),
+                          ),
+                        ),
+                      ),
+                      Card(
+                        child: FlatButton(
+                          onPressed: () => launch(
+                              'https://www.2dimensions.com/a/daniil91/files/flare/animated-orb/preview'),
+                          child: ListTile(
+                            leading: Container(
+                              height: 50,
+                              width: 50,
+                              child: FlareActor(
+                                'Animation/load.flr',
+                                alignment: Alignment.center,
+                                fit: BoxFit.contain,
+                                animation: 'Aura',
+                              ),
+                            ),
+                            trailing: Text('Daniil Lisnyak '),
+                            title: Text('Animated orb\nCC BY 4.0'),
+                            subtitle: Text(
+                                'https://www.2dimensions.com/a/daniil91/files/flare/animated-orb/preview'),
+                          ),
+                        ),
+                      ),
+                      Card(
+                        child: FlatButton(
+                          onPressed: () => launch(
+                              'https://www.2dimensions.com/a/pollux/files/flare/success-check/preview'),
+                          child: ListTile(
+                            leading: Container(
+                              height: 50,
+                              width: 50,
+                              child: FlareActor(
+                                'Animation/success.flr',
+                                alignment: Alignment.center,
+                                fit: BoxFit.contain,
+                                animation: 'success',
+                              ),
+                            ),
+                            trailing: Text('Guido Rosso'),
+                            title: Text('Success Check\nCC BY 4.0'),
+                            subtitle: Text(
+                                'https://www.2dimensions.com/a/pollux/files/flare/success-check/preview'),
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.copyright),
+                        title: Text(
+                          '动画共享协议',
+                          style:
+                              TextStyle(color: Colors.blueGrey, fontSize: 20),
+                        ),
+                      ),
+                      Card(
+                        child: FlatButton(
+                          onPressed: () => launch(
+                              'https://creativecommons.org/licenses/by/4.0/'),
+                          child: ListTile(
+                            title: Text(
+                                'Attribution 4.0 International (CC BY 4.0)'),
+                            subtitle: Text(
+                                'https://creativecommons.org/licenses/by/4.0/'),
                           ),
                         ),
                       ),
