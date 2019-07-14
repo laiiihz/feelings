@@ -59,7 +59,7 @@ flutter:
     - Animation/wallpaper.flr
     - Animation/success.flr
     - Animation/load.flr
-    - Animation/downloadAni.flr
+    - Animation/download.flr
     - Animation/rainbow.flr
     - Animation/random.flr
     - Animation/smile.flr

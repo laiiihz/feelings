@@ -40,7 +40,6 @@ class _ScreenShotState extends State<ScreenShotPage> {
     genRandomColor(),
   ];
   Color _backButtonColor = Colors.transparent;
-  Widget _tempWidget = Icon(Icons.save_alt);
 
   /// *
   /// EAST EGG!
@@ -229,24 +228,27 @@ class _ScreenShotState extends State<ScreenShotPage> {
                                   SizedBox(
                                     width: 30,
                                   ),
-                                  Text('已保存',style: TextStyle(fontSize: 20),),
+                                  Text(
+                                    '已保存',
+                                    style: TextStyle(fontSize: 20),
+                                  ),
                                 ],
                               ),
                             ),
                           );
-                          setState(() {
-                            _tempWidget = FlareActor(
-                              'Animation/downloadAni.flr',
-                              alignment: Alignment.center,
-                              fit: BoxFit.contain,
-                              animation: 'down_photo',
-                            );
-                          });
                         }).catchError((onError) {
                           print(onError);
                         });
                       },
-                      child: _tempWidget,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: FlareActor(
+                          'Animation/download.flr',
+                          alignment: Alignment.center,
+                          fit: BoxFit.contain,
+                          animation: 'download',
+                        ),
+                      ),
                     );
                   },
                 ),
@@ -418,11 +420,6 @@ class _ScreenShotState extends State<ScreenShotPage> {
                                       );
                                     },
                                   );
-                                  setState(() {
-                                    _wallpaperButtonState =
-                                        _wallpaperButtonState + 1;
-                                    _backButtonColor = Colors.white;
-                                  });
 
                                   break;
                               }
