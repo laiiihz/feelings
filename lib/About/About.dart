@@ -20,7 +20,6 @@ class _AboutState extends State<AboutPage> {
     ['Dart', 'https://dart.dev/', 'Google'],
     ['audioplayers', 'https://pub.dev/packages/audioplayers', 'Luan Nico'],
     ['url_launcher', 'https://pub.dev/packages/url_launcher', 'Flutter Team'],
-    ['screenshot', 'https://pub.dev/packages/screenshot', 'Sachin Ganesh'],
     [
       'image_gallery_saver',
       'https://pub.dev/packages/image_gallery_saver',

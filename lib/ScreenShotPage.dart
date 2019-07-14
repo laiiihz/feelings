@@ -1,9 +1,9 @@
 import 'package:feelings/About/About.dart';
 import 'package:feelings/SplashPage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:screenshot/screenshot.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:feelings/static.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:feelings/model/AppModel.dart';
+import 'dart:ui' as ui;
 
 class ScreenShotPage extends StatefulWidget {
   ScreenShotPage({
@@ -27,7 +28,6 @@ class ScreenShotPage extends StatefulWidget {
 }
 
 class _ScreenShotState extends State<ScreenShotPage> {
-  ScreenshotController _screenshotController = ScreenshotController();
   File _imageFile;
   Color colorA = genRandomColor();
   Color colorB = genRandomColor();
@@ -48,17 +48,13 @@ class _ScreenShotState extends State<ScreenShotPage> {
   /// **/
   int _wallpaperButtonState = 0;
 
-  _go2NextPage(
-    Alignment alignmentA,
-    Alignment alignmentB,
-      bool rainbowState
-  ) {
+  _go2NextPage(Alignment alignmentA, Alignment alignmentB, bool rainbowState) {
     Navigator.of(context).pop();
-    Future.delayed(Duration(milliseconds: 350),(){
+    Future.delayed(Duration(milliseconds: 350), () {
       Navigator.pushReplacement(
         context,
-        PageRouteBuilder(pageBuilder: (BuildContext context, Animation animation,
-            Animation secondaryAnimation) {
+        PageRouteBuilder(pageBuilder: (BuildContext context,
+            Animation animation, Animation secondaryAnimation) {
           return FadeTransition(
             opacity: animation,
             child: ScreenShotPage(
@@ -102,7 +98,6 @@ class _ScreenShotState extends State<ScreenShotPage> {
           appModel.setAlignmentEnd(alignmentTwo);
           appModel.setAlignmentStart(alignmentOne);
           appModel.setNowAlignment(nowAlign);
-
         },
         child: ListTile(
           title: Text(
@@ -170,6 +165,17 @@ class _ScreenShotState extends State<ScreenShotPage> {
         });
       }
     });
+  }
+
+  GlobalKey _globalKey = new GlobalKey();
+  Future<Uint8List> _capturePng() async {
+    RenderRepaintBoundary boundary =
+        _globalKey.currentContext.findRenderObject();
+    ui.Image image = await boundary.toImage(
+        pixelRatio: MediaQuery.of(context).devicePixelRatio);
+    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List pngBytes = byteData.buffer.asUint8List();
+    return pngBytes;
   }
 
   @override
@@ -292,45 +298,35 @@ class _ScreenShotState extends State<ScreenShotPage> {
                       heroTag: 'floatTwo',
                       backgroundColor: colorA,
                       onPressed: () {
-                        _screenshotController.capture().then((file) {
-                          setState(() {
-                            _imageFile = file;
-                          });
-                          _saveImage() async {
-                            Uint8List bytes =
-                                _imageFile.readAsBytesSync() as Uint8List;
-                            final image = await ImageGallerySaver.save(bytes);
-                          }
-
-                          _saveImage();
-                          Scaffold.of(context).showSnackBar(
-                            SnackBar(
-                              content: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Container(
-                                    height: 50,
-                                    width: 50,
-                                    child: FlareActor(
-                                      'Animation/smile.flr',
-                                      alignment: Alignment.center,
-                                      fit: BoxFit.contain,
-                                      animation: 'Appear',
+                        _capturePng().then((image) {
+                          ImageGallerySaver.save(image).then((_) {
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                content: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Container(
+                                      height: 50,
+                                      width: 50,
+                                      child: FlareActor(
+                                        'Animation/smile.flr',
+                                        alignment: Alignment.center,
+                                        fit: BoxFit.contain,
+                                        animation: 'Appear',
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 30,
-                                  ),
-                                  Text(
-                                    '已保存',
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                ],
+                                    SizedBox(
+                                      width: 30,
+                                    ),
+                                    Text(
+                                      '已保存',
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        }).catchError((onError) {
-                          print(onError);
+                            );
+                          },);
                         });
                       },
                       child: Padding(
@@ -351,8 +347,8 @@ class _ScreenShotState extends State<ScreenShotPage> {
           body: Center(
             child: Stack(
               children: <Widget>[
-                Screenshot(
-                  controller: _screenshotController,
+                RepaintBoundary(
+                  key: _globalKey,
                   child: Container(
                     height: 1200,
                     decoration: BoxDecoration(
