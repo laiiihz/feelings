@@ -11,11 +11,6 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPage extends State<SplashPage> {
   PageController _pageController = PageController(initialPage: 0);
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -9,6 +9,8 @@ import 'package:feelings/static.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:feelings/model/AppModel.dart';
 
 class ScreenShotPage extends StatefulWidget {
   ScreenShotPage({
@@ -67,44 +69,69 @@ class _ScreenShotState extends State<ScreenShotPage> {
     );
   }
 
-  Widget _genListTile(
-    Alignment alignmentOne,
-    Alignment alignmentTwo,
-    String text,
-  ) {
-    return FlatButton(
-      onPressed: () {
-        _go2NextPage(
-          alignmentOne,
-          alignmentTwo,
-        );
-      },
-      child: ListTile(
-        title: Text(text),
-        trailing: Container(
-          height: 30,
-          width: 30,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: alignmentOne,
-              end: alignmentTwo,
-              colors: [
-                colorA,
-                colorB,
-              ],
-            ),
-            borderRadius: BorderRadius.circular(50),
-          ),
-        ),
-      ),
-    );
-  }
+  List<Widget> _gradientList = [];
 
   @override
   void initState() {
     // TODO: implement initState
 
+    /**
+     * 获取应用第一次使用状态并显示Splash
+     * */
     super.initState();
+    Widget _genListTile(
+      Alignment alignmentOne,
+      Alignment alignmentTwo,
+      String text,
+    ) {
+      return FlatButton(
+        onPressed: () {
+          _go2NextPage(
+            alignmentOne,
+            alignmentTwo,
+          );
+          ScopedModel.of<AppModel>(context).setAlignmentEnd(alignmentTwo);
+          ScopedModel.of<AppModel>(context).setAlignmentStart(alignmentOne);
+        },
+        child: ListTile(
+          title: Text(text),
+          trailing: Container(
+            height: 30,
+            width: 30,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: alignmentOne,
+                end: alignmentTwo,
+                colors: [
+                  colorA,
+                  colorB,
+                ],
+              ),
+              borderRadius: BorderRadius.circular(50),
+            ),
+          ),
+        ),
+      );
+    }
+
+    _gradientList = [
+      _genListTile(
+        Alignment.topCenter,
+        Alignment.bottomCenter,
+        '上-下',
+      ),
+      _genListTile(
+        Alignment.centerLeft,
+        Alignment.centerRight,
+        '左-右',
+      ),
+      _genListTile(
+        Alignment.bottomLeft,
+        Alignment.topRight,
+        '左下-右上',
+      ),
+    ];
+
     Future<bool> _ifInitApp() async {
       SharedPreferences _shared = await SharedPreferences.getInstance();
       return _shared.getBool('isInitApp' ?? true);
@@ -129,66 +156,76 @@ class _ScreenShotState extends State<ScreenShotPage> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                FloatingActionButton(
-                  backgroundColor: colorB,
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(pageBuilder: (BuildContext context,
-                          Animation animation, Animation secondaryAnimation) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: ScreenShotPage(
-                            alignmentBegin: Alignment.topLeft,
-                            alignmentEnd: Alignment.bottomRight,
-                            rainbow: false,
-                          ),
+                ScopedModelDescendant<AppModel>(
+                  builder: (context, child, model) {
+                    return FloatingActionButton(
+                      backgroundColor: colorB,
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(pageBuilder: (BuildContext context,
+                              Animation animation,
+                              Animation secondaryAnimation) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: ScreenShotPage(
+                                alignmentBegin: model.alignmentStart,
+                                alignmentEnd: model.alignmentEnd,
+                                rainbow: false,
+                              ),
+                            );
+                          }),
                         );
-                      }),
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: FlareActor(
+                          'Animation/random.flr',
+                          animation: 'random',
+                          alignment: Alignment.center,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      heroTag: 'floatOne',
                     );
                   },
-                  child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: FlareActor(
-                      'Animation/random.flr',
-                      animation: 'random',
-                      alignment: Alignment.center,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  heroTag: 'floatOne',
                 ),
                 SizedBox(
                   width: 20,
                 ),
-                FloatingActionButton(
-                  backgroundColor: colorB,
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(pageBuilder: (BuildContext context,
-                          Animation animation, Animation secondaryAnimation) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: ScreenShotPage(
-                            alignmentBegin: Alignment.topLeft,
-                            alignmentEnd: Alignment.bottomRight,
-                            rainbow: true,
-                          ),
+                ScopedModelDescendant<AppModel>(
+                  builder: (context, child, model) {
+                    return FloatingActionButton(
+                      backgroundColor: colorB,
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(pageBuilder: (BuildContext context,
+                              Animation animation,
+                              Animation secondaryAnimation) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: ScreenShotPage(
+                                alignmentBegin: model.alignmentStart,
+                                alignmentEnd: model.alignmentEnd,
+                                rainbow: true,
+                              ),
+                            );
+                          }),
                         );
-                      }),
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: FlareActor(
+                          'Animation/rainbow.flr',
+                          animation: 'rainbow',
+                          alignment: Alignment.center,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      heroTag: 'floatThree',
                     );
                   },
-                  child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: FlareActor(
-                      'Animation/rainbow.flr',
-                      animation: 'rainbow',
-                      alignment: Alignment.center,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  heroTag: 'floatThree',
                 ),
                 SizedBox(
                   width: 20,
@@ -340,23 +377,7 @@ class _ScreenShotState extends State<ScreenShotPage> {
                                 return Container(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      _genListTile(
-                                        Alignment.topCenter,
-                                        Alignment.bottomCenter,
-                                        '上-下',
-                                      ),
-                                      _genListTile(
-                                        Alignment.centerLeft,
-                                        Alignment.centerRight,
-                                        '左-右',
-                                      ),
-                                      _genListTile(
-                                        Alignment.bottomLeft,
-                                        Alignment.topRight,
-                                        '左下-右上',
-                                      ),
-                                    ],
+                                    children: _gradientList,
                                   ),
                                 );
                               },
@@ -435,7 +456,7 @@ class _ScreenShotState extends State<ScreenShotPage> {
           ),
         ),
         onWillPop: () {
-          SystemNavigator.pop();
+          return SystemNavigator.pop();
         });
   }
 }
