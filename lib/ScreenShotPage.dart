@@ -51,22 +51,25 @@ class _ScreenShotState extends State<ScreenShotPage> {
   _go2NextPage(
     Alignment alignmentA,
     Alignment alignmentB,
+      bool rainbowState
   ) {
     Navigator.of(context).pop();
-    Navigator.pushReplacement(
-      context,
-      PageRouteBuilder(pageBuilder: (BuildContext context, Animation animation,
-          Animation secondaryAnimation) {
-        return FadeTransition(
-          opacity: animation,
-          child: ScreenShotPage(
-            alignmentBegin: alignmentA,
-            alignmentEnd: alignmentB,
-            rainbow: false,
-          ),
-        );
-      }),
-    );
+    Future.delayed(Duration(milliseconds: 350),(){
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(pageBuilder: (BuildContext context, Animation animation,
+            Animation secondaryAnimation) {
+          return FadeTransition(
+            opacity: animation,
+            child: ScreenShotPage(
+              alignmentBegin: alignmentA,
+              alignmentEnd: alignmentB,
+              rainbow: rainbowState,
+            ),
+          );
+        }),
+      );
+    });
   }
 
   List<Widget> _gradientList = [];
@@ -79,22 +82,35 @@ class _ScreenShotState extends State<ScreenShotPage> {
      * 获取应用第一次使用状态并显示Splash
      * */
     super.initState();
+    AppModel appModel = ScopedModel.of<AppModel>(context);
     Widget _genListTile(
       Alignment alignmentOne,
       Alignment alignmentTwo,
       String text,
+      int nowAlign,
     ) {
+      bool selectButton = false;
+      if (nowAlign == appModel.nowAlignment) selectButton = true;
       return FlatButton(
+        color: selectButton ? Colors.blue : Colors.blueGrey,
         onPressed: () {
           _go2NextPage(
             alignmentOne,
             alignmentTwo,
+            appModel.rainbowMode,
           );
-          ScopedModel.of<AppModel>(context).setAlignmentEnd(alignmentTwo);
-          ScopedModel.of<AppModel>(context).setAlignmentStart(alignmentOne);
+          appModel.setAlignmentEnd(alignmentTwo);
+          appModel.setAlignmentStart(alignmentOne);
+          appModel.setNowAlignment(nowAlign);
+
         },
         child: ListTile(
-          title: Text(text),
+          title: Text(
+            text,
+            style: TextStyle(
+              color: selectButton ? Colors.black : Colors.white,
+            ),
+          ),
           trailing: Container(
             height: 30,
             width: 30,
@@ -116,19 +132,28 @@ class _ScreenShotState extends State<ScreenShotPage> {
 
     _gradientList = [
       _genListTile(
+        Alignment.topLeft,
+        Alignment.bottomRight,
+        '左上-右下',
+        1,
+      ),
+      _genListTile(
         Alignment.topCenter,
         Alignment.bottomCenter,
         '上-下',
+        2,
       ),
       _genListTile(
         Alignment.centerLeft,
         Alignment.centerRight,
         '左-右',
+        3,
       ),
       _genListTile(
         Alignment.bottomLeft,
         Alignment.topRight,
         '左下-右上',
+        4,
       ),
     ];
 
@@ -156,6 +181,35 @@ class _ScreenShotState extends State<ScreenShotPage> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+//                ScopedModelDescendant<AppModel>(
+//                  builder: (context, child, model) {
+//                    return FloatingActionButton(
+//                      backgroundColor: colorB,
+//                      onPressed: () {
+//                        Navigator.pushReplacement(
+//                          context,
+//                          PageRouteBuilder(pageBuilder: (BuildContext context,
+//                              Animation animation,
+//                              Animation secondaryAnimation) {
+//                            return FadeTransition(
+//                              opacity: animation,
+//                              child: ScreenShotPage(
+//                                alignmentBegin: Alignment.centerLeft,
+//                                alignmentEnd: Alignment.bottomCenter,
+//                                rainbow: false,
+//                              ),
+//                            );
+//                          }),
+//                        );
+//                      },
+//                      child: Icon(Icons.developer_board),
+//                      heroTag: 'floatTest',
+//                    );
+//                  },
+//                ),
+//                SizedBox(
+//                  width: 20,
+//                ),
                 ScopedModelDescendant<AppModel>(
                   builder: (context, child, model) {
                     return FloatingActionButton(
@@ -176,6 +230,7 @@ class _ScreenShotState extends State<ScreenShotPage> {
                             );
                           }),
                         );
+                        model.setRainbowMode(false);
                       },
                       child: Padding(
                         padding: EdgeInsets.all(10),
@@ -213,6 +268,7 @@ class _ScreenShotState extends State<ScreenShotPage> {
                             );
                           }),
                         );
+                        model.setRainbowMode(true);
                       },
                       child: Padding(
                         padding: EdgeInsets.all(10),

@@ -6,6 +6,9 @@ class AppModel extends Model {
   Alignment _alignmentEnd = Alignment.bottomRight;
   Alignment get alignmentStart => _alignmentStart;
   Alignment get alignmentEnd => _alignmentEnd;
+
+  int _nowAlignmentNum=1;
+  int get nowAlignment=>_nowAlignmentNum;
   void setAlignmentStart(Alignment alignment) {
     _alignmentStart = alignment;
     notifyListeners();
@@ -16,10 +19,16 @@ class AppModel extends Model {
     notifyListeners();
   }
 
-  int _a = 10;
-  get a => _a;
-  void setA() {
-    _a = 10;
+  void setNowAlignment(int nowAlign){
+    _nowAlignmentNum=nowAlign;
     notifyListeners();
   }
+
+  bool _rainbowMode=false;
+  get rainbowMode=>_rainbowMode;
+  setRainbowMode(bool rainbow){
+    _rainbowMode=rainbow;
+    notifyListeners();
+  }
+
 }
