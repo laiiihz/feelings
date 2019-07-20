@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:feelings/model/AppModel.dart';
+import 'package:feelings/Settings/SettingsPage.dart';
 import 'dart:ui' as ui;
 
 class ScreenShotPage extends StatefulWidget {
@@ -73,11 +74,11 @@ class _ScreenShotState extends State<ScreenShotPage> {
   @override
   void initState() {
     // TODO: implement initState
-
     /**
      * 获取应用第一次使用状态并显示Splash
      * */
     super.initState();
+
     AppModel appModel = ScopedModel.of<AppModel>(context);
     Widget _genListTile(
       Alignment alignmentOne,
@@ -168,11 +169,11 @@ class _ScreenShotState extends State<ScreenShotPage> {
   }
 
   GlobalKey _globalKey = new GlobalKey();
-  Future<Uint8List> _capturePng() async {
+  Future<Uint8List> _capturePng(double size) async {
     RenderRepaintBoundary boundary =
         _globalKey.currentContext.findRenderObject();
     ui.Image image = await boundary.toImage(
-        pixelRatio: MediaQuery.of(context).devicePixelRatio);
+        pixelRatio: MediaQuery.of(context).devicePixelRatio*size);
     ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData.buffer.asUint8List();
     return pngBytes;
@@ -292,55 +293,59 @@ class _ScreenShotState extends State<ScreenShotPage> {
                 SizedBox(
                   width: 20,
                 ),
-                Builder(
-                  builder: (BuildContext context) {
-                    return FloatingActionButton(
-                      heroTag: 'floatTwo',
-                      backgroundColor: colorA,
-                      onPressed: () {
-                        _capturePng().then((image) {
-                          ImageGallerySaver.save(image).then((_) {
-                            Scaffold.of(context).showSnackBar(
-                              SnackBar(
-                                content: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Container(
-                                      height: 50,
-                                      width: 50,
-                                      child: FlareActor(
-                                        'Animation/smile.flr',
-                                        alignment: Alignment.center,
-                                        fit: BoxFit.contain,
-                                        animation: 'Appear',
-                                      ),
+                ScopedModelDescendant<AppModel>(builder: ( context,  child,  model) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return FloatingActionButton(
+                        heroTag: 'floatTwo',
+                        backgroundColor: colorA,
+                        onPressed: () {
+                          _capturePng(model.wallPaperSize).then((image) {
+                            ImageGallerySaver.save(image).then(
+                                  (_) {
+                                Scaffold.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Container(
+                                          height: 50,
+                                          width: 50,
+                                          child: FlareActor(
+                                            'Animation/smile.flr',
+                                            alignment: Alignment.center,
+                                            fit: BoxFit.contain,
+                                            animation: 'Appear',
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 30,
+                                        ),
+                                        Text(
+                                          '已保存',
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(
-                                      width: 30,
-                                    ),
-                                    Text(
-                                      '已保存',
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                  ),
+                                );
+                              },
                             );
-                          },);
-                        });
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: FlareActor(
-                          'Animation/download.flr',
-                          alignment: Alignment.center,
-                          fit: BoxFit.contain,
-                          animation: 'download',
+                          });
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: FlareActor(
+                            'Animation/download.flr',
+                            alignment: Alignment.center,
+                            fit: BoxFit.contain,
+                            animation: 'download',
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    },
+                  );
+                },),
               ],
             ),
           ),
@@ -420,8 +425,17 @@ class _ScreenShotState extends State<ScreenShotPage> {
                       ],
                     ),
                     actions: <Widget>[
-                      IconButton(
-                          icon: Icon(Icons.panorama_wide_angle),
+                      MaterialButton(
+                          child: Container(
+                            child: FlareActor(
+                              'Animation/typer.flr',
+                              alignment: Alignment.center,
+                              fit: BoxFit.contain,
+                              animation: 'type',
+                            ),
+                            width: 35,
+                          ),
+                          minWidth: 10,
                           onPressed: () {
                             showModalBottomSheet(
                               context: context,
@@ -440,15 +454,24 @@ class _ScreenShotState extends State<ScreenShotPage> {
                         child: Material(
                           color: Colors.transparent,
                           child: PopupMenuButton(
-                            icon: Icon(
-                              Icons.menu,
-                              color: Colors.white,
+                            child: Container(
+                              child: FlareActor(
+                                'Animation/menu.flr',
+                                alignment: Alignment.center,
+                                fit: BoxFit.contain,
+                                animation: 'menuAni',
+                              ),
+                              width: 35,
                             ),
                             itemBuilder: (BuildContext context) {
                               return [
                                 PopupMenuItem<int>(
                                   child: Text('渐变壁纸'),
                                   value: 1,
+                                ),
+                                PopupMenuItem<int>(
+                                  child: Text('设置'),
+                                  value: 2,
                                 ),
                                 PopupMenuItem<int>(
                                   child: Text('关于'),
@@ -493,7 +516,17 @@ class _ScreenShotState extends State<ScreenShotPage> {
                                       );
                                     },
                                   );
-
+                                  setState(() {
+                                    _wallpaperButtonState++;
+                                  });
+                                  if (_wallpaperButtonState == 3) {
+                                    setState(() {
+                                      _backButtonColor = Colors.white;
+                                    });
+                                  }
+                                  break;
+                                case 2:
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>SettingsPage()));
                                   break;
                               }
                             },

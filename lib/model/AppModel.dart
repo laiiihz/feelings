@@ -31,4 +31,11 @@ class AppModel extends Model {
     notifyListeners();
   }
 
+  double _wallPaperSize=1.0;
+  double get wallPaperSize=>_wallPaperSize;
+  setWallPaperSize(double rate){
+    _wallPaperSize=rate;
+    notifyListeners();
+  }
+
 }
