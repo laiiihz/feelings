@@ -307,8 +307,9 @@ class _SplashPage extends State<SplashPage> {
             ),
           ),
         ),
-        onWillPop: (){
+        onWillPop: ()async{
           SystemNavigator.pop();
+          return false;
         });
   }
 }
