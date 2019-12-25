@@ -12,9 +12,9 @@ class OpenSourceProjects{
   }
 
   Widget genListTile(){
-    return Card(
-      child: FlatButton(
-        onPressed: () => launch(_web),
+    return  Material(
+      child: InkWell(
+        onTap: () => launch(_web),
         child: ListTile(
           title: Text(_name),
           subtitle: Text(_web),
